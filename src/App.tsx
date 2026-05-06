@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FileCode, Copy, Check, FileTerminal, AlertCircle } from 'lucide-react';
+import { FileCode, Copy, Check, MonitorSmartphone, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 
-// Загружаем все сгенерированные файлы WPF проекта
-const filesInfo = import.meta.glob('../WpfHttpMonitor/**/*', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+// Загружаем все сгенерированные файлы кроссплатформенного проекта
+const filesInfo = import.meta.glob('../AvaloniaHttpMonitor/**/*', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
 
 export default function App() {
   const filePaths = Object.keys(filesInfo).sort();
@@ -22,7 +22,7 @@ export default function App() {
     }
   };
 
-  const getFileName = (path: string) => path.replace('../WpfHttpMonitor/', '');
+  const getFileName = (path: string) => path.replace('../AvaloniaHttpMonitor/', '');
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
@@ -30,17 +30,20 @@ export default function App() {
       <div className="bg-slate-900 text-white p-6 shadow-md">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-2xl font-bold mb-2 flex items-center">
-            <FileTerminal className="mr-3 h-6 w-6 text-blue-400" />
-            Задание выполнено: Система Мониторинга HTTP (WPF)
+            <MonitorSmartphone className="mr-3 h-6 w-6 text-blue-400" />
+            Задание: Система Мониторинга (Кроссплатформенная)
           </h1>
           <div className="bg-blue-900/40 border border-blue-700/50 rounded-lg p-4 mt-4 flex items-start text-blue-100">
             <AlertCircle className="h-6 w-6 text-blue-400 mr-3 shrink-0 mt-0.5" />
             <div>
               <p className="font-semibold text-white mb-1">Обратите внимание: это веб-среда (браузер)</p>
               <p className="text-sm line-height-relaxed">
-                Я не могу запустить Windows Desktop приложение (WPF и C#) прямо в браузере. Поэтому я <strong>написал весь необходимый код</strong> для вашего задания и создал удобный просмотрщик ниже. 
-                <br className="mb-1"/>
-                Вы можете <strong>открыть скачанный проект в Visual Studio</strong> (меню настроек (значок шестеренки) ➡️ Export to ZIP), либо просто скопировать код нужных файлов из списка ниже.
+                WPF — это технология Microsoft, которая <strong>работает только на Windows</strong>! Именно поэтому на Mac вы получаете ошибку <code>NETSDK1100</code>. Чтобы вы все равно смогли запустить и сдать задание, я переписал проект на <strong>Avalonia UI</strong> (кроссплатформенный аналог WPF).
+                <br className="mt-2 block"/>
+                <strong>Как запустить на Mac:</strong> <br/>
+                1. Скачайте проект целиком (шестеренка вверху справа ➡️ Export to ZIP)<br/>
+                2. Раззипуйте, откройте терминал и зайдите в папку: <code>cd AvaloniaHttpMonitor</code><br/>
+                3. Выполните команду: <code>dotnet run</code> (откроется нативное окно сервера и клиента!)
               </p>
             </div>
           </div>

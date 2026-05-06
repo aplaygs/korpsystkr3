@@ -1,0 +1,115 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="AvaloniaHttpMonitor.MainWindow"
+        Title="Система Мониторинга HTTP (Avalonia C#)" Height="700" Width="1000" Background="#F0F2F5"
+        WindowStartupLocation="CenterScreen">
+    
+    <Grid>
+        <TabControl Margin="10" Background="White" BorderBrush="#D1D5DB" BorderThickness="1">
+            
+            <!-- Сервер -->
+            <TabItem Header="HTTP-Сервер">
+                <Grid Margin="15" RowDefinitions="Auto,*">
+                    <Border Grid.Row="0" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="5" Padding="15" Margin="0,0,0,15" Background="#F9FAFB">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <TextBlock Text="Порт:" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
+                            <TextBox x:Name="PortTextBox" Width="100" Text="8080" VerticalContentAlignment="Center"/>
+                            <Button x:Name="StartServerBtn" Content="Запустить сервер" Width="160" Click="StartServerBtn_Click" Background="#3B82F6" Foreground="White" Cursor="Hand"/>
+                            
+                            <Border Margin="20,0,0,0" Padding="10,5" CornerRadius="5" Background="#F3F4F6">
+                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    <TextBlock Text="Статус:" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="ServerStatusTextBlock" FontWeight="Bold" Foreground="#EF4444" Text="Остановлен" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                    
+                    <Border Grid.Row="1" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="5">
+                        <Grid RowDefinitions="Auto,*">
+                            <Border Background="#F3F4F6" Padding="10,5" BorderBrush="#E5E7EB" BorderThickness="0,0,0,1">
+                                <TextBlock Text="Логи работы сервера (входящие запросы)"/>
+                            </Border>
+                            <TextBox x:Name="ServerLogsTextBox" Grid.Row="1" IsReadOnly="True" TextWrapping="Wrap" FontFamily="Consolas" Background="#1E1E1E" Foreground="#D4D4D4" Margin="5"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+            
+            <!-- Клиент -->
+            <TabItem Header="HTTP-Клиент">
+                <Grid Margin="15" RowDefinitions="Auto,Auto,*,Auto">
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,15" Spacing="10">
+                        <TextBlock Text="Метод:" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
+                        <ComboBox x:Name="MethodComboBox" Width="100" SelectedIndex="0">
+                            <ComboBoxItem Content="GET"/>
+                            <ComboBoxItem Content="POST"/>
+                        </ComboBox>
+                        <TextBlock Text="URL:" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
+                        <TextBox x:Name="UrlTextBox" Width="500" Text="https://jsonplaceholder.typicode.com/posts/1" VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <Border Grid.Row="1" Height="120" Margin="0,0,0,15" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="5">
+                        <Grid RowDefinitions="Auto,*">
+                            <Border Background="#F3F4F6" Padding="10,5" BorderBrush="#E5E7EB" BorderThickness="0,0,0,1">
+                                <TextBlock Text="Тело запроса (JSON - используется только для POST)"/>
+                            </Border>
+                            <TextBox x:Name="RequestBodyTextBox" Grid.Row="1" Text="{}{&quot;title&quot;: &quot;foo&quot;, &quot;body&quot;: &quot;bar&quot;, &quot;userId&quot;: 1}" TextWrapping="Wrap" AcceptsReturn="True" FontFamily="Consolas" Margin="5"/>
+                        </Grid>
+                    </Border>
+                    
+                    <Border Grid.Row="2" Margin="0,0,0,15" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="5">
+                        <Grid RowDefinitions="Auto,*">
+                            <Border Background="#F3F4F6" Padding="10,5" BorderBrush="#E5E7EB" BorderThickness="0,0,0,1">
+                                <TextBlock Text="Тело ответа"/>
+                            </Border>
+                            <TextBox x:Name="ClientResponseTextBox" Grid.Row="1" IsReadOnly="True" TextWrapping="Wrap" FontFamily="Consolas" Background="#F8FAFC" Margin="5"/>
+                        </Grid>
+                    </Border>
+                    
+                    <Button x:Name="SendRequestBtn" Content="Отправить запрос" Grid.Row="3" Width="220" HorizontalAlignment="Right" Click="SendRequestBtn_Click" Background="#10B981" Foreground="White" Cursor="Hand" FontSize="14" FontWeight="SemiBold" HorizontalContentAlignment="Center"/>
+                </Grid>
+            </TabItem>
+            
+            <!-- Мониторинг -->
+            <TabItem Header="Мониторинг и Аналитика">
+                <Grid Margin="15" RowDefinitions="Auto,Auto,*">
+                    <Border Grid.Row="0" Margin="0,0,0,15" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="5">
+                        <Grid RowDefinitions="Auto,*">
+                            <Border Background="#F3F4F6" Padding="10,5" BorderBrush="#E5E7EB" BorderThickness="0,0,0,1">
+                                <TextBlock Text="Статистика сервера"/>
+                            </Border>
+                            <TextBlock x:Name="StatsTextBlock" Grid.Row="1" Text="Ожидание запуска сервера..." FontSize="14" FontWeight="Medium" Margin="10"/>
+                        </Grid>
+                    </Border>
+                    
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,15" Spacing="10">
+                        <TextBlock Text="Метод:" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="FilterMethodComboBox" Width="100" SelectionChanged="FilterComboBox_SelectionChanged" SelectedIndex="0">
+                            <ComboBoxItem Content="Все"/>
+                            <ComboBoxItem Content="GET"/>
+                            <ComboBoxItem Content="POST"/>
+                        </ComboBox>
+                        
+                        <TextBlock Text="Статус:" VerticalAlignment="Center"/>
+                        <TextBox x:Name="FilterStatusTextBox" Width="100" TextChanged="FilterKeywordTextBox_TextChanged"/>
+
+                        <TextBlock Text="Поиск в URL:" VerticalAlignment="Center"/>
+                        <TextBox x:Name="FilterKeywordTextBox" Width="200" TextChanged="FilterKeywordTextBox_TextChanged"/>
+                    </StackPanel>
+                    
+                    <DataGrid x:Name="LogsDataGrid" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Время" Binding="{Binding Timestamp}" Width="150" />
+                            <DataGridTextColumn Header="Тип" Binding="{Binding Direction}" Width="100" />
+                            <DataGridTextColumn Header="Метод" Binding="{Binding Method}" Width="70" />
+                            <DataGridTextColumn Header="URL" Binding="{Binding Url}" Width="*" />
+                            <DataGridTextColumn Header="Статус" Binding="{Binding ResponseStatus}" Width="80" />
+                            <DataGridTextColumn Header="Длительность (мс)" Binding="{Binding DurationMs}" Width="150" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
